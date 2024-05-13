@@ -10,6 +10,15 @@ namespace GPT_meeting
 {
     public class AppState
     {
+        public AppState(List<AiBot> bots, string model, int maxTokens, string userName, string userRole)
+        {
+            Bots = new BindingList<AiBot>(bots);
+            Model = model;
+            MaxTokens = maxTokens;
+            UserName = userName;
+            UserRole = userRole;
+        }
+
         public BindingList<AiBot> Bots { get; set; } = new BindingList<AiBot> { 
             new AiBot {
                 Name = "Айдос", 

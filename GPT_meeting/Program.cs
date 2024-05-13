@@ -1,10 +1,12 @@
 using GPT_meeting.Data;
+using GPT_meeting.Data.Entityes;
+using System.Text.Json;
 
 namespace GPT_meeting
 {
     internal static class Program
     {
-        public static AppState App {  get; private set; }
+        public static AppState App { get; private set; }
         public static DataManager DataManager { get; private set; }
         public static Mediator Mediator { get; private set; }
 
@@ -16,7 +18,10 @@ namespace GPT_meeting
         [STAThread]
         static void Main()
         {
-            App = new AppState();
+            var user = JsonSerializer.Deserialize<User>(File.ReadAllText("User.json"));
+            var bots = JsonSerializer.Deserialize<List<AiBot>>(File.ReadAllText("Bots.json"));
+
+            App = new AppState(bots, "gpt-3.5-turbo", 500, user.Name, user.Role);
             DataManager = new DataManager();
             Mediator = new Mediator();
 
@@ -26,6 +31,12 @@ namespace GPT_meeting
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
             Application.Run(new MainForm());
+        }
+
+        class User
+        {
+            public string Name { get; set; }
+            public string Role { get; set; }
         }
     }
 }
